@@ -65,7 +65,7 @@
     content: "{{ registry.login | to_nice_json }}"
 
 - name: Configure docker daemon
-    copy:
+  copy:
     dest: /etc/docker/daemon.json
     content: "{{ docker_daemon_config | to_nice_json }}"
   register: docker_daemon_config
