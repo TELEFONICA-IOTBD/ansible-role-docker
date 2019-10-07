@@ -1,12 +1,12 @@
 ---
 
-lvm_storage_enable: true
-lvm_storage_pv_pesize: '32'
-lvm_storage_pv_devices:
+docker_lvm_storage_enable: true
+docker_lvm_storage_pv_pesize: '32'
+docker_lvm_storage_pv_devices:
   - /dev/vdb
-lvm_storage_vg_name: 'docker'
-lvm_storage_lv_name: 'lib'
-lvm_storage_lv_size: '9g'
+docker_lvm_storage_vg_name: 'docker'
+docker_lvm_storage_lv_name: 'lib'
+docker_lvm_storage_lv_size: '9g'
 
 docker_daemon_config:
   storage-driver: overlay2
@@ -24,7 +24,7 @@ docker_daemon_config:
       path: "/usr/libexec/docker/docker-runc-current"
   default-runtime: docker-runc
 
-registry:
+docker_registry:
   login:
     auths:
       test.smartdigits.io:

@@ -19,30 +19,30 @@
 
 - name: Create LVM volume group
   lvg:
-    vg: "{{ lvm_storage_vg_name }}"
-    pvs: "{{ lvm_storage_pv_devices }}"
-    pesize: "{{ lvm_storage_pv_pesize | default('32') }}"
-  when: lvm_storage_enable
+    vg: "{{ docker_lvm_storage_vg_name }}"
+    pvs: "{{ docker_lvm_storage_pv_devices }}"
+    pesize: "{{ docker_lvm_storage_pv_pesize | default('32') }}"
+  when: docker_lvm_storage_enable
   register: lvm_vg
 
 - name: Create LVM logical volume
   lvol:
-    vg: "{{ lvm_storage_vg_name }}"
-    lv: "{{ lvm_storage_lv_name }}"
-    size: "{{ lvm_storage_lv_size }}"
+    vg: "{{ docker_lvm_storage_vg_name }}"
+    lv: "{{ docker_lvm_storage_lv_name }}"
+    size: "{{ docker_lvm_storage_lv_size }}"
   when: lvm_storage_enable
 
 - name: Create LVM logical volume filesystem
   filesystem:
     fstype: xfs
-    dev: "/dev/mapper/{{ lvm_storage_vg_name }}-{{ lvm_storage_lv_name }}"
+    dev: "/dev/mapper/{{ docker_lvm_storage_vg_name }}-{{ docker_lvm_storage_lv_name }}"
     resizefs: True
   when: lvm_storage_enable
 
 - name: Mount docker lib data volume
   mount:
     path: /var/lib/docker
-    src: "/dev/mapper/{{ lvm_storage_vg_name }}-{{ lvm_storage_lv_name }}"
+    src: "/dev/mapper/{{ docker_lvm_storage_vg_name }}-{{ docker_lvm_storage_lv_name }}"
     fstype: xfs
     state: mounted
   when: lvm_storage_enable
@@ -62,7 +62,7 @@
   copy: 
     dest: ~/.docker/config.json 
     mode: 0600
-    content: "{{ registry.login | to_nice_json }}"
+    content: "{{ docker_registry.login | to_nice_json }}"
 
 - name: Configure docker daemon
   copy:
