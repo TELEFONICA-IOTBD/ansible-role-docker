@@ -90,7 +90,7 @@
   when: docker_daemon_config.changed or docker_systemd_override.changed or data_mount.changed
 
 - name: Start and enable docker service
-    service:
+  service:
     name: docker
     enabled: True
     state: started
