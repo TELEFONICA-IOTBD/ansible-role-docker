@@ -6,7 +6,7 @@ docker_lvm_storage_pv_devices:
   - /dev/vdb
 docker_lvm_storage_vg_name: 'docker'
 docker_lvm_storage_lv_name: 'lib'
-docker_lvm_storage_lv_size: '9g'
+docker_lvm_storage_lv_size: '100%FREE'
 
 docker_daemon_config:
   storage-driver: overlay2
