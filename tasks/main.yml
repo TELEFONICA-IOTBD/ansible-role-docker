@@ -71,9 +71,9 @@
   register: docker_daemon_config
 
 - name: Override docker systemd unit configuration
-  copy:
+  template:
+	src: systemd/override.conf
 	dest: /etc/systemd/system/docker.service.d/override.conf
-	src: docker/systemd/override.conf
   register: docker_systemd_override
 
 #- name: Configure systemd docker unit
