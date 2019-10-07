@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure kernel ip_forward is enabled
-  sysctl:
+	sysctl:
 		name: net.ipv4.ip_forward
 		value: '1'
 		sysctl_set: True
@@ -12,10 +12,10 @@
   yum:
 	state: present
 	name:
-	  - lvm2
-	  - docker
-	  - docker-python
-	  - rh-mongodb36-mongodb-syspaths
+		- lvm2
+		- docker
+		- docker-python
+		- rh-mongodb36-mongodb-syspaths
 
 - name: Create LVM volume group
   lvg:
