@@ -1,79 +1,79 @@
 ---
 
 - name: Ensure kernel ip_forward is enabled
-	sysctl:
-		name: net.ipv4.ip_forward
-		value: '1'
-		sysctl_set: True
-		state: present
-		reload: True
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: True
+    state: present
+    reload: True
 
 - name: Install required packages
   yum:
-	state: present
-	name:
-		- lvm2
-		- docker
-		- docker-python
-		- rh-mongodb36-mongodb-syspaths
+  state: present
+  name:
+    - lvm2
+    - docker
+    - docker-python
+    - rh-mongodb36-mongodb-syspaths
 
 - name: Create LVM volume group
   lvg:
-		vg: "{{ lvm_storage_vg_name }}"
-		pvs: "{{ lvm_storage_pv_devices }}"
-		pesize: "{{ lvm_storage_pv_pesize | default('32') }}"
-	when: lvm_storage_enable
-	register: lvm_vg
+    vg: "{{ lvm_storage_vg_name }}"
+    pvs: "{{ lvm_storage_pv_devices }}"
+    pesize: "{{ lvm_storage_pv_pesize | default('32') }}"
+  when: lvm_storage_enable
+  register: lvm_vg
 
 - name: Create LVM logical volume
   lvol:
-		vg: "{{ lvm_storage_vg_name }}"
-		lv: "{{ lvm_storage_lv_name }}"
-		size: "{{ lvm_storage_lv_size }}"
-	when: lvm_storage_enable
+    vg: "{{ lvm_storage_vg_name }}"
+    lv: "{{ lvm_storage_lv_name }}"
+    size: "{{ lvm_storage_lv_size }}"
+  when: lvm_storage_enable
 
 - name: Create LVM logical volume filesystem
   filesystem:
-		fstype: xfs
-		dev: "/dev/mapper/{{ lvm_storage_vg_name }}-{{ lvm_storage_lv_name }}"
-		resizefs: True
-	when: lvm_storage_enable
+    fstype: xfs
+    dev: "/dev/mapper/{{ lvm_storage_vg_name }}-{{ lvm_storage_lv_name }}"
+    resizefs: True
+  when: lvm_storage_enable
 
 - name: Mount docker lib data volume
   mount:
-		path: /var/lib/docker
-		src: "/dev/mapper/{{ lvm_storage_vg_name }}-{{ lvm_storage_lv_name }}"
-		fstype: xfs
-		state: mounted
+    path: /var/lib/docker
+    src: "/dev/mapper/{{ lvm_storage_vg_name }}-{{ lvm_storage_lv_name }}"
+    fstype: xfs
+    state: mounted
   when: lvm_storage_enable
   register: data_mount
 
 - name: Ensure docker config dirs exists
   file:
-		path: "{{ item }}"
-		state: directory
-		mode: 0600
+    path: "{{ item }}"
+    state: directory
+    mode: 0600
   with_items:
-	- /etc/docker
-	- /etc/systemd/system/docker.service.d
-	- ~/.docker
+    - /etc/docker
+    - /etc/systemd/system/docker.service.d
+    - ~/.docker
 
 - name: Configure docker login
   copy: 
-		dest: ~/.docker/config.json 
-		mode: 0600
-		content: "{{ registry.login | to_nice_json }}"
+    dest: ~/.docker/config.json 
+    mode: 0600
+    content: "{{ registry.login | to_nice_json }}"
 
 - name: Configure docker daemon
-		copy:
-		dest: /etc/docker/daemon.json
-		content: "{{ docker_daemon_config | to_nice_json }}"
+    copy:
+    dest: /etc/docker/daemon.json
+    content: "{{ docker_daemon_config | to_nice_json }}"
   register: docker_daemon_config
 
 - name: Override docker systemd unit configuration
   template:
-		src: systemd/override.conf
-		dest: /etc/systemd/system/docker.service.d/override.conf
+    src: systemd/override.conf
+    dest: /etc/systemd/system/docker.service.d/override.conf
   register: docker_systemd_override
 
 #- name: Configure systemd docker unit
@@ -84,13 +84,13 @@
 
 - name: Reload docker service
   systemd:
-		name: docker
-		daemon_reload: True
-		state: restarted
+    name: docker
+    daemon_reload: True
+    state: restarted
   when: docker_daemon_config.changed or docker_systemd_override.changed or data_mount.changed
 
 - name: Start and enable docker service
-		service:
-		name: docker
-		enabled: True
-		state: started
+    service:
+    name: docker
+    enabled: True
+    state: started
