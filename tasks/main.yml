@@ -10,12 +10,12 @@
 
 - name: Install required packages
   yum:
-  state: present
-  name:
-    - lvm2
-    - docker
-    - docker-python
-    - rh-mongodb36-mongodb-syspaths
+    state: present
+    name:
+      - lvm2
+      - docker
+      - docker-python
+      - rh-mongodb36-mongodb-syspaths
 
 - name: Create LVM volume group
   lvg:
