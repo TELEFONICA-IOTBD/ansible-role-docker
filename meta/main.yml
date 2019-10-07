@@ -1,0 +1,6 @@
+galaxy_info:
+  role_name: ansible-role-docker
+  author: h4rdl1nk 
+  description: Docker daemon install and config 
+  min_ansible_version: 2.7
+
