@@ -25,6 +25,9 @@ docker_daemon_config:
   default-runtime: docker-runc
 
 docker_registry:
+  proxy: 
+    enable: False
+    url: http://dummyproxy.internal
   login:
     auths:
       test.smartdigits.io:
