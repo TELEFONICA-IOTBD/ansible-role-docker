@@ -1,6 +1,6 @@
 ---
 
-docker_lvm_storage_enable: true
+docker_lvm_storage_enable: false 
 docker_lvm_storage_pv_pesize: '32'
 docker_lvm_storage_pv_devices:
   - /dev/vdb

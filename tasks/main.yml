@@ -30,14 +30,14 @@
     vg: "{{ docker_lvm_storage_vg_name }}"
     lv: "{{ docker_lvm_storage_lv_name }}"
     size: "{{ docker_lvm_storage_lv_size }}"
-  when: lvm_storage_enable
+  when: docker_lvm_storage_enable
 
 - name: Create LVM logical volume filesystem
   filesystem:
     fstype: xfs
     dev: "/dev/mapper/{{ docker_lvm_storage_vg_name }}-{{ docker_lvm_storage_lv_name }}"
     resizefs: True
-  when: lvm_storage_enable
+  when: docker_lvm_storage_enable
 
 - name: Mount docker lib data volume
   mount:
@@ -45,7 +45,7 @@
     src: "/dev/mapper/{{ docker_lvm_storage_vg_name }}-{{ docker_lvm_storage_lv_name }}"
     fstype: xfs
     state: mounted
-  when: lvm_storage_enable
+  when: docker_lvm_storage_enable
   register: data_mount
 
 - name: Ensure docker config dirs exists
