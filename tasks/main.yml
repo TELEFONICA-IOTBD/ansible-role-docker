@@ -17,36 +17,8 @@
       - docker-python
       - rh-mongodb36-mongodb-syspaths
 
-- name: Create LVM volume group
-  lvg:
-    vg: "{{ docker_lvm_storage_vg_name }}"
-    pvs: "{{ docker_lvm_storage_pv_devices }}"
-    pesize: "{{ docker_lvm_storage_pv_pesize | default('32') }}"
+- include_tasks: lvm.yml
   when: docker_lvm_storage_enable
-  register: lvm_vg
-
-- name: Create LVM logical volume
-  lvol:
-    vg: "{{ docker_lvm_storage_vg_name }}"
-    lv: "{{ docker_lvm_storage_lv_name }}"
-    size: "{{ docker_lvm_storage_lv_size }}"
-  when: docker_lvm_storage_enable
-
-- name: Create LVM logical volume filesystem
-  filesystem:
-    fstype: xfs
-    dev: "/dev/mapper/{{ docker_lvm_storage_vg_name }}-{{ docker_lvm_storage_lv_name }}"
-    resizefs: True
-  when: docker_lvm_storage_enable
-
-- name: Mount docker lib data volume
-  mount:
-    path: /var/lib/docker
-    src: "/dev/mapper/{{ docker_lvm_storage_vg_name }}-{{ docker_lvm_storage_lv_name }}"
-    fstype: xfs
-    state: mounted
-  when: docker_lvm_storage_enable
-  register: data_mount
 
 - name: Ensure docker config dirs exists
   file:
