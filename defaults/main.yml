@@ -1,12 +1,28 @@
 ---
 
-docker_lvm_storage_enable: false 
+docker_lvm_storage_enable: False 
 docker_lvm_storage_pv_pesize: '32'
 docker_lvm_storage_pv_devices:
   - /dev/vdb
 docker_lvm_storage_vg_name: 'docker'
 docker_lvm_storage_lv_name: 'lib'
 docker_lvm_storage_lv_size: '100%FREE'
+
+docker_ce_enable: False
+docker_ce_packages_url_base: https://download.docker.com/linux/centos/7/x86_64/stable/Packages
+docker_ce_packages:
+  - docker-ce-cli-19.03.5-3.el7.x86_64.rpm
+  - containerd.io-1.2.6-3.3.el7.x86_64.rpm
+  #- docker-ce-selinux-17.03.3.ce-1.el7.noarch.rpm
+  - docker-ce-19.03.5-3.el7.x86_64.rpm
+
+docker_pip_enable: False
+docker_pip_enable_install_script: False
+docker_pip_so_packages:
+  - python-pip
+  - python-devel
+  - "@Development tools"
+docker_pip_python_packages: []
 
 docker_daemon_config:
   storage-driver: overlay2

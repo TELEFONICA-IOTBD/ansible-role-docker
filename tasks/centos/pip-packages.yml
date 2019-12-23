@@ -1,0 +1,22 @@
+---
+
+- name: Install required OS packages
+  yum:
+    name: "{{ docker_pip_so_packages }}"
+    state: present
+  when: not docker_pip_enable_install_script
+
+- name: Get pip install script from URL
+  uri:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp/get-pip.py
+    creates: /tmp/get-pip.pyp
+  when: docker_pip_enable_install_script
+
+- name: Execute pip install script
+  command: python /tmp/get-pip.py
+  when: docker_pip_enable_install_script
+
+- name: Install required python packages
+  pip:
+    name: "{{ docker_pip_python_packages }}"

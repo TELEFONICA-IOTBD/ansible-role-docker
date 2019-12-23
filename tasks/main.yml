@@ -15,7 +15,13 @@
       - lvm2
       - docker
       - docker-python
-      - rh-mongodb36-mongodb-syspaths
+  when: not docker_ce_enable
+
+- include_tasks: centos/packages.yml
+  when: docker_ce_enable
+
+- include_tasks: centos/pip-packages.yml
+  when: docker_pip_enable
 
 - include_tasks: lvm.yml
   when: docker_lvm_storage_enable

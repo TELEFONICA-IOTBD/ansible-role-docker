@@ -1,0 +1,24 @@
+---
+
+- name: Get required packages
+  uri:
+    url: "{{ docker_ce_packages_url_base }}/{{ item }}"
+    method: GET
+    dest: "/tmp/{{ item }}"
+    creates: "/tmp/{{ item }}"
+  with_items: "{{ docker_ce_packages }}"
+  become: False
+  delegate_to: localhost
+
+- name: Upload packages
+  copy:
+    src: "/tmp/{{ item }}"
+    dest: "{{ item }}"
+  with_items: "{{ docker_ce_packages }}"
+
+- name: Install packages
+  yum:
+    #name: "{{ item }}"
+    name: "{{ docker_ce_packages }}"
+    state: present
+  with_items: "{{ docker_ce_packages }}"
