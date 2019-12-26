@@ -18,10 +18,10 @@
   when: not docker_ce_enable
 
 - include_tasks: centos/packages.yml
-  when: docker_ce_enable
+  when: docker_ce_enable and ( ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' )
 
 - include_tasks: centos/pip-packages.yml
-  when: docker_pip_enable
+  when: docker_pip_enable and ( ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' )
 
 - include_tasks: lvm.yml
   when: docker_lvm_storage_enable
@@ -65,7 +65,7 @@
     name: docker
     daemon_reload: True
     state: restarted
-  when: docker_daemon_config.changed or docker_systemd_override.changed or data_mount.changed
+  when: docker_daemon_config.changed or docker_systemd_override.changed
 
 - name: Start and enable docker service
   service:
