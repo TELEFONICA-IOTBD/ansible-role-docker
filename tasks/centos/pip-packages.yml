@@ -1,5 +1,10 @@
 ---
 
+- name: Remove repositories
+  yum_repository:
+    name: "{{ docker_pip_so_remove_repos }}"
+    state: absent
+
 - name: Install required OS packages
   yum:
     name: "{{ docker_pip_so_packages }}"

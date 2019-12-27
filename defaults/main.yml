@@ -18,6 +18,7 @@ docker_ce_packages:
 
 docker_pip_enable: False
 docker_pip_enable_install_script: False
+docker_pip_so_remove_repos: []
 docker_pip_so_packages:
   - python-pip
   - python-devel
