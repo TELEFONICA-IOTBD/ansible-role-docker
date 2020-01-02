@@ -8,6 +8,12 @@ docker_lvm_storage_vg_name: 'docker'
 docker_lvm_storage_lv_name: 'lib'
 docker_lvm_storage_lv_size: '100%FREE'
 
+docker_packages_so:
+  - lvm2
+  - docker
+  - docker-python
+  - rh-mongodb36-mongodb-syspaths
+
 docker_daemon_config:
   storage-driver: overlay2
   debug: true

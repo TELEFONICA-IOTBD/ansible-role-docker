@@ -11,11 +11,7 @@
 - name: Install required packages
   yum:
     state: present
-    name:
-      - lvm2
-      - docker
-      - docker-python
-      - rh-mongodb36-mongodb-syspaths
+    name: "{{ docker_packages_so }}"
 
 - include_tasks: lvm.yml
   when: docker_lvm_storage_enable
