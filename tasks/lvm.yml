@@ -22,7 +22,7 @@
 
 - name: Mount docker lib data volume
   mount:
-    path: /var/lib/docker
+    path: "{{ docker_lib_directory }}"
     src: "/dev/mapper/{{ docker_lvm_storage_vg_name }}-{{ docker_lvm_storage_lv_name }}"
     fstype: xfs
     state: mounted

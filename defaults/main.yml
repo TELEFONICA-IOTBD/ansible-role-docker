@@ -8,6 +8,8 @@ docker_lvm_storage_vg_name: 'docker'
 docker_lvm_storage_lv_name: 'lib'
 docker_lvm_storage_lv_size: '100%FREE'
 
+docker_lib_directory: /var/lib/docker
+
 docker_packages_so:
   - lvm2
   - docker

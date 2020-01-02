@@ -65,9 +65,9 @@
   register: docker_daemon_start
 
 - name: Apply new SELinux file context to filesystem ( 1/2 )
-  command: semanage fcontext -a -e /var/lib/docker /var/lib/docker
-  when: docker_daemon_start.changed and ansible_mounts|selectattr('mount','equalto','/var/lib/docker/overlay2')|list|length and ansible_facts.selinux.status == 'enabled'
+  command: "semanage fcontext -a -e /var/lib/docker {{ docker_lib_directory }}"
+  when: docker_daemon_start.changed and ansible_mounts|selectattr('mount','equalto',docker_lib_directory)|list|length and ansible_facts.selinux.status == 'enabled'
 
 - name: Apply new SELinux file context to filesystem ( 2/2 )
-  command: restorecon -R /var/lib/docker
-  when: docker_daemon_start.changed and ansible_mounts|selectattr('mount','equalto','/var/lib/docker/overlay2')|list|length and ansible_facts.selinux.status == 'enabled'
+  command: "restorecon -R {{ docker_lib_directory }}"
+  when: docker_daemon_start.changed and ansible_mounts|selectattr('mount','equalto',docker_lib_directory)|list|length and ansible_facts.selinux.status == 'enabled'
