@@ -16,10 +16,6 @@
 - include_tasks: lvm.yml
   when: docker_lvm_storage_enable
 
-- name: Restore SELinux labeling on docker lib directory
-  command: restorecon /var/lib/docker
-  when: ansible_mounts|selectattr('mount','equalto','/var/lib/docker/overlay2')|list|length and ansible_facts.selinux.status == 'enabled'
-
 - name: Ensure docker config dirs exists
   file:
     path: "{{ item }}"
@@ -66,3 +62,12 @@
     name: docker
     enabled: True
     state: started
+  register: docker_daemon_start
+
+- name: Apply new SELinux file context to filesystem ( 1/2 )
+  command: semanage fcontext -a -e /var/lib/docker /var/lib/docker
+  when: docker_daemon_start.changed and ansible_mounts|selectattr('mount','equalto','/var/lib/docker/overlay2')|list|length and ansible_facts.selinux.status == 'enabled'
+
+- name: Apply new SELinux file context to filesystem ( 2/2 )
+  command: restorecon -R /var/lib/docker
+  when: docker_daemon_start.changed and ansible_mounts|selectattr('mount','equalto','/var/lib/docker/overlay2')|list|length and ansible_facts.selinux.status == 'enabled'
