@@ -64,6 +64,10 @@
     state: started
   register: docker_daemon_start
 
+- name: Refresh facts
+  setup:
+  when: docker_daemon_start.changed
+
 - name: Apply new SELinux file context to filesystem ( 1/2 )
   command: "semanage fcontext -a -e /var/lib/docker {{ docker_lib_directory }}"
   when: docker_daemon_start.changed and ansible_mounts|selectattr('mount','equalto',docker_lib_directory)|list|length and ansible_facts.selinux.status == 'enabled'
