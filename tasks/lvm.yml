@@ -12,6 +12,7 @@
     vg: "{{ docker_lvm_storage_vg_name }}"
     lv: "{{ docker_lvm_storage_lv_name }}"
     size: "{{ docker_lvm_storage_lv_size }}"
+    shrink: False
 
 - name: Create LVM logical volume filesystem
   filesystem:
