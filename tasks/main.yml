@@ -11,10 +11,7 @@
 - name: Install required packages
   yum:
     state: present
-    name:
-      - lvm2
-      - docker
-      - docker-python
+    name: "{{ docker_so_packages }}"
   when: not docker_ce_enable
 
 - include_tasks: centos/packages.yml

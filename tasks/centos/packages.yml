@@ -1,12 +1,17 @@
 ---
 
+- name: Install required packages
+  yum:
+    state: present
+    name: "{{ docker_ce_so_packages }}"
+
 - name: Get required packages
   uri:
     url: "{{ docker_ce_packages_url_base }}/{{ item }}"
     method: GET
     dest: "/tmp/{{ item }}"
     creates: "/tmp/{{ item }}"
-  with_items: "{{ docker_ce_packages }}"
+  with_items: "{{ docker_ce_remote_packages }}"
   become: False
   delegate_to: localhost
 
@@ -14,11 +19,11 @@
   copy:
     src: "/tmp/{{ item }}"
     dest: "{{ item }}"
-  with_items: "{{ docker_ce_packages }}"
+  with_items: "{{ docker_ce_remote_packages }}"
 
 - name: Install packages
   yum:
     #name: "{{ item }}"
-    name: "{{ docker_ce_packages }}"
+    name: "{{ docker_ce_remote_packages }}"
     state: present
-  with_items: "{{ docker_ce_packages }}"
+  with_items: "{{ docker_ce_remote_packages }}"

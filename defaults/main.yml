@@ -1,5 +1,10 @@
 ---
 
+docker_so_packages:
+  - lvm2
+  - docker
+  - docker-python
+
 docker_lvm_storage_enable: False 
 docker_lvm_storage_pv_pesize: '32'
 docker_lvm_storage_pv_devices:
@@ -10,7 +15,9 @@ docker_lvm_storage_lv_size: '100%FREE'
 
 docker_ce_enable: False
 docker_ce_packages_url_base: https://download.docker.com/linux/centos/7/x86_64/stable/Packages
-docker_ce_packages:
+docker_ce_so_packages:
+  - lvm2
+docker_ce_remote_packages:
   - docker-ce-cli-19.03.5-3.el7.x86_64.rpm
   - containerd.io-1.2.6-3.3.el7.x86_64.rpm
   #- docker-ce-selinux-17.03.3.ce-1.el7.noarch.rpm
