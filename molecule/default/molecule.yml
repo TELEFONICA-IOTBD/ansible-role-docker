@@ -7,9 +7,17 @@ driver:
     name: virtualbox
 lint:
   name: yamllint
+
 platforms:
   - name: instance
     box: centos/7
+    config_options:
+      synced_folder: false
+    provider_raw_config_args:
+      - "customize ['createhd', '--filename', '${MOLECULE_EPHEMERAL_DIRECTORY:-/tmp}/extra.vdi', '--size', 2 * 1024]"
+      - "customize ['storagectl', :id, '--name', 'SATA', '--add', 'sata', '--portcount', 2 ]"
+      - "customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', '${MOLECULE_EPHEMERAL_DIRECTORY:-/tmp}/extra.vdi']"
+
 provisioner:
   name: ansible
   options:
@@ -20,6 +28,12 @@ provisioner:
     group_vars: 
       all:
         docker_ce_enable: True
+
+        docker_lvm_storage_enable: True 
+        docker_lvm_storage_pv_devices:
+          - /dev/sdb
+        docker_lvm_storage_lv_size: '1.5G'
+
         docker_pip_enable: True
         docker_pip_enable_install_script: True
         docker_pip_so_packages:
@@ -27,6 +41,7 @@ provisioner:
           - "@Development tools"
         docker_pip_python_packages:
           - docker-compose
+
         docker_daemon_config:
           storage-driver: overlay2
           debug: true
@@ -35,6 +50,8 @@ provisioner:
           bip: "192.168.200.1/24"
           userland-proxy: true
           live-restore: true
+          icc: true
+          selinux-enabled: true
 
 verifier:
   name: testinfra

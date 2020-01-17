@@ -1,5 +1,7 @@
 ---
 
+docker_lib_directory: /var/lib/docker
+
 docker_so_packages:
   - lvm2
   - docker
