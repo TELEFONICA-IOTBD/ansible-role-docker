@@ -42,7 +42,7 @@
 - name: Configure docker daemon
   copy:
     dest: /etc/docker/daemon.json
-    content: "{{ docker_daemon_config | to_nice_json }}"
+    content: "{{ docker_daemon_json_config | to_nice_json }}"
   register: docker_daemon_config
 
 - name: Override docker systemd unit configuration

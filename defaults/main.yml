@@ -32,7 +32,7 @@ docker_pip_so_packages:
   - "@Development tools"
 docker_pip_python_packages: []
 
-docker_daemon_config:
+docker_daemon_json_config:
   storage-driver: overlay2
   debug: true
   exec-opts:
