@@ -27,7 +27,7 @@ provisioner:
           - "@Development tools"
         docker_pip_python_packages:
           - docker-compose
-        docker_daemon_json_config:
+        docker_daemon_config:
           storage-driver: overlay2
           debug: true
           exec-opts:
