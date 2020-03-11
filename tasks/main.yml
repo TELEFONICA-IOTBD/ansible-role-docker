@@ -11,8 +11,12 @@
 - name: Install required packages
   yum:
     state: present
-    name: "{{ docker_so_packages }}"
-  when: not docker_ce_enable
+    name: "{{ docker_so_packages_add }}"
+
+- name: Install required packages
+  yum:
+    state: absent
+    name: "{{ docker_so_packages_del }}"
 
 - include_tasks: centos/docker-ce-packages.yml
   when: docker_ce_enable and ( ansible_distribution|lower == 'centos' or ansible_distribution|lower == 'redhat' )

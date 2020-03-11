@@ -29,13 +29,17 @@ provisioner:
     group_vars: 
       all:
         docker_ce_enable: True
-
+        docker_so_packages_add:
+          - python-devel
+          - "@Development tools"
+        docker_so_packages_del:
+          - python-requests
         docker_lvm_storage_enable: True 
         docker_lvm_storage_pv_devices:
           - /dev/sdb
         docker_lvm_storage_lv_size: '1.5G'
 
-        docker_pip_enable: True
+        docker_pip_enable: False
         docker_pip_enable_install_script: True
         docker_pip_so_packages:
           - python-devel

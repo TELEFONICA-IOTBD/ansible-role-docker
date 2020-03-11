@@ -5,11 +5,6 @@
     name: "{{ docker_pip_so_remove_repos }}"
     state: absent
 
-- name: Install required OS packages
-  yum:
-    name: "{{ docker_pip_so_packages }}"
-    state: present
-
 - name: Get pip install script from URL
   uri:
     url: https://bootstrap.pypa.io/get-pip.py
