@@ -11,13 +11,13 @@ lint:
 
 platforms:
   - name: instance
-    box: centos/7
+    box: bento/ubuntu-18.04
     config_options:
       synced_folder: false
-    provider_raw_config_args:
-      - "customize ['createhd', '--filename', '${MOLECULE_EPHEMERAL_DIRECTORY:-/tmp}/extra.vdi', '--size', 2 * 1024]"
-      - "customize ['storagectl', :id, '--name', 'SATA', '--add', 'sata', '--portcount', 2 ]"
-      - "customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', '${MOLECULE_EPHEMERAL_DIRECTORY:-/tmp}/extra.vdi']"
+    #provider_raw_config_args:
+    #  - "customize ['createhd', '--filename', '${MOLECULE_EPHEMERAL_DIRECTORY:-/tmp}/extra.vdi', '--size', 2 * 1024]"
+    #  - "customize ['storagectl', :id, '--name', 'SATA', '--add', 'sata', '--portcount', 2 ]"
+    #  - "customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', '${MOLECULE_EPHEMERAL_DIRECTORY:-/tmp}/extra.vdi']"
 
 provisioner:
   name: ansible
@@ -30,11 +30,14 @@ provisioner:
       all:
         docker_ce_enable: True
         docker_so_packages_add:
-          - python-devel
-          - "@Development tools"
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
         docker_so_packages_del:
           - python-requests
-        docker_lvm_storage_enable: True 
+        docker_lvm_storage_enable: False 
         docker_lvm_storage_pv_devices:
           - /dev/sdb
         docker_lvm_storage_lv_size: '1.5G'

@@ -1,0 +1,12 @@
+---
+
+- name: Install required packages
+  apt:
+    state: present
+    name: "{{ docker_so_packages_add }}"
+    update_cache: True
+
+- name: Install required packages
+  apt:
+    state: absent
+    name: "{{ docker_so_packages_del }}"

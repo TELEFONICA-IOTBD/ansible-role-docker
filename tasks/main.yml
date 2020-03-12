@@ -8,18 +8,17 @@
     state: present
     reload: True
 
-- name: Install required packages
-  yum:
-    state: present
-    name: "{{ docker_so_packages_add }}"
-
-- name: Install required packages
-  yum:
-    state: absent
-    name: "{{ docker_so_packages_del }}"
+- include_tasks: centos/os-packages.yml
+  when: docker_ce_enable and ( ansible_distribution|lower == 'centos' or ansible_distribution|lower == 'redhat' )
+  
+- include_tasks: debian/os-packages.yml
+  when: docker_ce_enable and ( ansible_distribution|lower == 'ubuntu' or ansible_distribution|lower == 'debian' )
 
 - include_tasks: centos/docker-ce-packages.yml
   when: docker_ce_enable and ( ansible_distribution|lower == 'centos' or ansible_distribution|lower == 'redhat' )
+
+- include_tasks: debian/docker-ce-packages.yml
+  when: docker_ce_enable and ( ansible_distribution|lower == 'ubuntu' or ansible_distribution|lower == 'debian' )
 
 - include_tasks: common/pip-packages.yml
   when: docker_pip_enable
